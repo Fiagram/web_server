@@ -7,7 +7,7 @@ const TotalBalanceBox = ({
   return (
     <section className="flex w-full items-center gap-5 rounded-xl 
             border border-gray-100 p-4 shadow-chart sm:gap-6 sm:p-6">
-      <div className="flex size-full max-w-[100px] items-center sm:max-w-[120px]">
+      <div className="flex size-full max-w-25 items-center sm:max-w-30">
         <DoughnutChart accounts={accounts} />
       </div>
 

@@ -3,6 +3,7 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { cn } from '@/lib/utils'
 
 type ErrorsType = {
     username?: string
@@ -51,10 +52,7 @@ const AuthForm = ({ type }: { type: "SIGN_IN" | "SIGN_UP" }) => {
         return ''
     }
 
-    const validateEmail = (value: string, isRequired: boolean = false) => {
-        if (!value) {
-            return isRequired ? 'Email is required' : ''
-        }
+    const validateEmail = (value: string) => {
         const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/
         if (!emailRegex.test(value)) return 'Please enter a valid email address'
         return ''
@@ -94,7 +92,7 @@ const AuthForm = ({ type }: { type: "SIGN_IN" | "SIGN_UP" }) => {
             const fullnameError = validateFullname(fullname)
             if (fullnameError) newErrors.fullname = fullnameError
 
-            const emailError = validateEmail(email, false)
+            const emailError = validateEmail(email)
             if (emailError) newErrors.email = emailError
 
             if (phoneNumber) {
@@ -120,7 +118,6 @@ const AuthForm = ({ type }: { type: "SIGN_IN" | "SIGN_UP" }) => {
         setIsLoading(true)
         try {
             if (type === 'SIGN_IN') {
-                console.log('Sign in with:', { username, password, isRememberMe })
                 // TODO: Call /auth/signin endpoint
             } else {
                 const account = {
@@ -130,7 +127,6 @@ const AuthForm = ({ type }: { type: "SIGN_IN" | "SIGN_UP" }) => {
                     phoneNumber: phoneNumber ? { countryCode, number: phoneNumber } : undefined,
                     role: 'member'
                 }
-                console.log('Sign up with:', { account, password })
                 // TODO: Call /auth/signup endpoint
             }
         } finally {
@@ -142,10 +138,14 @@ const AuthForm = ({ type }: { type: "SIGN_IN" | "SIGN_UP" }) => {
     const buttonText = isSignUp ? 'Sign Up' : 'Sign In'
     const loadingText = isSignUp ? 'Signing up...' : 'Signing in...'
 
-    const inputClassName = 'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2'
+    const labelClassName = `block text-fg text-sm font-medium mb-2`
+    const inputClassName = `flex h-10 w-full rounded-md border border-pri
+                    bg-bg px-4 py-2 text-sm placeholder:text-fg-muted focus-visible:outline`
+    const invalidClassName = `text-xs font-medium text-utils-error mt-2`
+    const linkClassName = `font-semibold text-pri hover:underline`
 
     return (
-        <section className='flex flex-col w-full max-w-md gap-10'>
+        <section className='container flex flex-col w-full max-w-md gap-10'>
             <div className='flex flex-col flex-center gap-1'>
                 <div className='flex-center flex-row gap-2'>
                     <Image
@@ -165,28 +165,30 @@ const AuthForm = ({ type }: { type: "SIGN_IN" | "SIGN_UP" }) => {
             <form onSubmit={handleSubmit} className='space-y-4'>
                 {isSignUp && (
                     <div>
-                        <label htmlFor='fullname' className='block text-sm font-medium mb-2'>
+                        <label htmlFor='fullname' className={labelClassName}>
                             Full Name
                         </label>
                         <input
                             id='fullname'
                             type='text'
-                            placeholder='Enter your full name'
+                            placeholder='5-200 characters'
                             value={fullname}
                             onChange={(e) => {
                                 setFullname(e.target.value)
                                 if (errors.fullname) setErrors({ ...errors, fullname: undefined })
                             }}
-                            className={inputClassName}
+                            className={cn(inputClassName,
+                                { "text-utils-error border-utils-error": errors.fullname }
+                            )}
                         />
                         {errors.fullname && (
-                            <p className='text-xs font-medium text-utils-error mt-1'>{errors.fullname}</p>
+                            <p className={invalidClassName}>{errors.fullname}</p>
                         )}
                     </div>
                 )}
 
                 <div>
-                    <label htmlFor='username' className='block text-sm font-medium mb-2'>
+                    <label htmlFor='username' className={labelClassName}>
                         Username
                     </label>
                     <input
@@ -198,37 +200,41 @@ const AuthForm = ({ type }: { type: "SIGN_IN" | "SIGN_UP" }) => {
                             setUsername(e.target.value)
                             if (errors.username) setErrors({ ...errors, username: undefined })
                         }}
-                        className={inputClassName}
+                        className={cn(inputClassName,
+                            { "text-utils-error border-utils-error": errors.username }
+                        )}
                     />
                     {errors.username && (
-                        <p className='text-xs font-medium text-utils-error mt-1'>{errors.username}</p>
+                        <p className={invalidClassName}>{errors.username}</p>
                     )}
                 </div>
 
                 <div>
-                    <label htmlFor='password' className='block text-sm font-medium mb-2'>
+                    <label htmlFor='password' className={labelClassName}>
                         Password
                     </label>
                     <input
                         id='password'
                         type='password'
-                        placeholder='8-72 characters with uppercase, lowercase, digit, and special character'
+                        placeholder='8-72 characters, uppercase, lowercase, digit, and special character'
                         value={password}
                         onChange={(e) => {
                             setPassword(e.target.value)
                             if (errors.password) setErrors({ ...errors, password: undefined })
                         }}
-                        className={inputClassName}
+                        className={cn(inputClassName,
+                            { "text-utils-error border-utils-error": errors.password }
+                        )}
                     />
                     {errors.password && (
-                        <p className='text-xs font-medium text-utils-error mt-1'>{errors.password}</p>
+                        <p className={invalidClassName}>{errors.password}</p>
                     )}
                 </div>
 
                 {isSignUp && (
                     <>
                         <div>
-                            <label htmlFor='email' className='block text-sm font-medium mb-2'>
+                            <label htmlFor='email' className={labelClassName}>
                                 Email
                             </label>
                             <input
@@ -240,18 +246,20 @@ const AuthForm = ({ type }: { type: "SIGN_IN" | "SIGN_UP" }) => {
                                     setEmail(e.target.value)
                                     if (errors.email) setErrors({ ...errors, email: undefined })
                                 }}
-                                className={inputClassName}
+                                className={cn(inputClassName,
+                                    { "text-utils-error border-utils-error": errors.email }
+                                )}
                             />
                             {errors.email && (
-                                <p className='text-xs font-medium text-utils-error mt-1'>{errors.email}</p>
+                                <p className={invalidClassName}>{errors.email}</p>
                             )}
                         </div>
 
                         <div>
-                            <label className='block text-sm font-medium mb-2'>
+                            <label className={labelClassName}>
                                 Phone Number <span className='text-muted-foreground text-xs'>(optional)</span>
                             </label>
-                            <div className='flex gap-2'>
+                            <div className='flex flex-row gap-2'>
                                 <input
                                     id='countryCode'
                                     type='text'
@@ -261,7 +269,9 @@ const AuthForm = ({ type }: { type: "SIGN_IN" | "SIGN_UP" }) => {
                                         setCountryCode(e.target.value)
                                         if (errors.countryCode) setErrors({ ...errors, countryCode: undefined })
                                     }}
-                                    className={`${inputClassName} w-20 flex-shrink-0`}
+                                    className={cn(inputClassName, "min-w-20 flex-0",
+                                        { "text-utils-error border-utils-error": errors.countryCode }
+                                    )}
                                 />
                                 <input
                                     id='phoneNumber'
@@ -272,14 +282,16 @@ const AuthForm = ({ type }: { type: "SIGN_IN" | "SIGN_UP" }) => {
                                         setPhoneNumber(e.target.value)
                                         if (errors.phoneNumber) setErrors({ ...errors, phoneNumber: undefined })
                                     }}
-                                    className={`${inputClassName} flex-1`}
+                                    className={cn(inputClassName, "flex-1",
+                                        { "text-utils-error border-utils-error": errors.phoneNumber }
+                                    )}
                                 />
                             </div>
                             {errors.countryCode && (
-                                <p className='text-xs font-medium text-utils-error mt-1'>{errors.countryCode}</p>
+                                <p className={invalidClassName}>{errors.countryCode}</p>
                             )}
                             {errors.phoneNumber && (
-                                <p className='text-xs font-medium text-utils-error mt-1'>{errors.phoneNumber}</p>
+                                <p className={invalidClassName}>{errors.phoneNumber}</p>
                             )}
                         </div>
                     </>
@@ -303,20 +315,22 @@ const AuthForm = ({ type }: { type: "SIGN_IN" | "SIGN_UP" }) => {
                 <button
                     type='submit'
                     disabled={isLoading}
-                    className='inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full'
+                    className='flex-center rounded-4xl text-sm font-medium transition-colors 
+                         focus-visible:bg-green-500 cursor-pointer bg-pri text-fg h-10 px-4 py-2 w-full
+                         disabled:pointer-events-none disabled:opacity-50'
                 >
                     {isLoading ? loadingText : buttonText}
                 </button>
             </form>
 
-            <div className='mt-6 text-center'>
-                <p className='text-sm text-muted-foreground'>
+            <div className='mb-20 text-center'>
+                <p className='text-sm text-fg-muted'>
                     {isSignUp ? (
                         <>
                             Already have an account?{' '}
                             <Link
                                 href='/sign-in'
-                                className='font-semibold text-fg hover:underline'
+                                className={linkClassName}
                             >
                                 Sign in here
                             </Link>
@@ -326,13 +340,17 @@ const AuthForm = ({ type }: { type: "SIGN_IN" | "SIGN_UP" }) => {
                             Don't have an account?{' '}
                             <Link
                                 href='/sign-up'
-                                className='font-semibold text-fg hover:underline'
+                                className={linkClassName}
                             >
                                 Sign up here
                             </Link>
                         </>
                     )}
                 </p>
+            </div>
+
+            <div className='mt-auto flex-center flex-row text-sm text-fg-muted'>
+                Copyright &copy; 2026 Fiagram. All rights reserved.
             </div>
         </section>
     )

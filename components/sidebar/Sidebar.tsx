@@ -13,17 +13,17 @@ const Sidebar = ({ user }: SiderbarProps) => {
 
   return (
     <section className="sticky left-0 top-0 flex h-screen w-fit flex-col justify-between border-r border-sb-border 
-                        bg-sb-bg pt-8 text-sb-fg max-md:hidden sm:p-4 xl:p-6">
+                        bg-sb-bg text-sb-fg pt-4 md:p-4 xl:p-6 max-md:hidden">
       <nav className="flex flex-col gap-5">
-        <Link href="/" className="flex flex-row justify-center items-center gap-2 mt-10">
+        <Link href="/" className="flex flex-row justify-center items-center gap-2 mb-2">
           <Image
             src="/icons/logo.svg"
             width={35}
             height={35}
             alt="Fiagram logo"
-            className="size-8 max-xl:size-14"
+            className="size-8 max-xl:size-12"
           />
-          <h1 className="xl:text-24 font-ibm-plex-serif 
+          <h1 className="xl:text-26 font-ibm-plex-serif 
             font-bold text-sb-fg max-xl:hidden">Fiagram</h1>
         </Link>
 
@@ -33,7 +33,7 @@ const Sidebar = ({ user }: SiderbarProps) => {
           return (
             <Link href={item.route} key={item.label}
               className={
-                cn('flex items-center justify-start gap-3 py-2 md:p-3 2xl:p-6 rounded-lg',
+                cn('flex flex-row items-center justify-start max-xl:justify-center gap-3 py-2 md:p-3 2xl:p-4 rounded-lg',
                   { 'bg-sb-item-bg-active': isActive })}>
               <div className="relative size-6">
                 <Image
