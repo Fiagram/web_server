@@ -7,9 +7,9 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 
 
-const DoughnutChart = ({ accounts }: DoughnutChartProps) => {
-  const accountNames = accounts.map((a) => a.name);
-  const balances = accounts.map((a) => a.currentBalance)
+const DoughnutChart = ({ portfolio }: { portfolio: Portfolio }) => {
+  const accountNames = portfolio.assets.map((a) => a.name);
+  const balances = portfolio.assets.map((a) => a.currentBalance)
 
   const data = {
     datasets: [

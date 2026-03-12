@@ -2,7 +2,25 @@ import HeaderBox from '@/components/HeaderBox'
 import TotalBalanceBox from '@/components/TotalBalanceBox';
 
 const Home = () => {
-    const loggedIn = { firstName: "thaivd" };
+    const loggedIn = { username: "thaivd" };
+    const examplePortfolio: Portfolio = {
+        assets: [
+            {
+                name: "Apple Stock",
+                currentBalance: 5000
+            },
+            {
+                name: "Bitcoin",
+                currentBalance: 12000
+            },
+            {
+                name: "Savings Account",
+                currentBalance: 8500
+            }
+        ],
+        totalAssets: 3,
+        totalCurrentBalance: 25500
+    };
 
     return (
         <section className="flex w-full flex-row max-xl:max-h-screen max-xl:overflow-y-scroll">
@@ -11,80 +29,12 @@ const Home = () => {
                     <HeaderBox
                         type="greeting"
                         title="Welcome"
-                        user={loggedIn?.firstName || "Guest"}
+                        username={loggedIn?.username}
                         subtext="Manage transactions efficiently with Fiagram"
                     />
 
                     <TotalBalanceBox
-                        accounts={[
-                            {
-                                id: "acc_001",
-                                availableBalance: 2500.50,
-                                currentBalance: 2500.50,
-                                officialName: "Chase Checking Account",
-                                mask: "1234",
-                                institutionId: "ins_chase",
-                                name: "Chase Checking",
-                                type: "depository",
-                                subtype: "checking",
-                                appwriteItemId: "item_001",
-                                shareableId: "share_001"
-                            },
-                            {
-                                id: "acc_002",
-                                availableBalance: 1850.75,
-                                currentBalance: 1850.75,
-                                officialName: "Bank of America Savings",
-                                mask: "5678",
-                                institutionId: "ins_bofa",
-                                name: "BofA Savings",
-                                type: "depository",
-                                subtype: "savings",
-                                appwriteItemId: "item_002",
-                                shareableId: "share_002"
-                            },
-                            {
-                                id: "acc_003",
-                                availableBalance: 500.00,
-                                currentBalance: 500.00,
-                                officialName: "Wells Fargo Credit Card",
-                                mask: "9012",
-                                institutionId: "ins_wellsfargo",
-                                name: "Wells Fargo CC",
-                                type: "credit",
-                                subtype: "credit card",
-                                appwriteItemId: "item_003",
-                                shareableId: "share_003"
-                            },
-                            {
-                                id: "acc_004",
-                                availableBalance: 50000.00,
-                                currentBalance: 50000.00,
-                                officialName: "Vanguard Investment Account",
-                                mask: "3456",
-                                institutionId: "ins_vanguard",
-                                name: "Vanguard Investment",
-                                type: "investment",
-                                subtype: "brokerage",
-                                appwriteItemId: "item_004",
-                                shareableId: "share_004"
-                            },
-                            {
-                                id: "acc_005",
-                                availableBalance: -5000.00,
-                                currentBalance: -5000.00,
-                                officialName: "Student Loan Account",
-                                mask: "7890",
-                                institutionId: "ins_fedloan",
-                                name: "Federal Student Loan",
-                                type: "loan",
-                                subtype: "student",
-                                appwriteItemId: "item_005",
-                                shareableId: "share_005"
-                            }
-                        ]}
-                        totalBanks={2}
-                        totalCurrentBalance={5401.02}
+                        portfolio={examplePortfolio}
                     />
                 </header>
             </div>

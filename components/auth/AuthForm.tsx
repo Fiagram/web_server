@@ -118,17 +118,69 @@ const AuthForm = ({ type }: { type: "SIGN_IN" | "SIGN_UP" }) => {
         setIsLoading(true)
         try {
             if (type === 'SIGN_IN') {
-                // TODO: Call /auth/signin endpoint
-            } else {
-                const account = {
-                    username,
-                    fullname,
-                    email: email || undefined,
-                    phoneNumber: phoneNumber ? { countryCode, number: phoneNumber } : undefined,
-                    role: 'member'
+                const response = await fetch('http://localhost:8080/api/v1/auth/signin', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        "username": username,
+                        "password": password,
+                        "isRememberMe": isRememberMe,
+                    })
+                })
+
+                if (!response.ok) {
+                    const errorData = await response.json()
+                    setErrors({ username: errorData.message || 'Sign in failed' })
+                    return
                 }
-                // TODO: Call /auth/signup endpoint
+
+                const data = await response.json()
+                // Store token if provided
+                if (data.token) {
+                    localStorage.setItem('token', data.token)
+                }
+                // Redirect to home page
+                window.location.href = '/'
+            } else {
+                const response = await fetch('http://localhost:8080/api/v1/auth/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        "account": {
+                            "username": username,
+                            "fullname": fullname,
+                            "email": email,
+                            "phoneNumber": {
+                                "countryCode": countryCode,
+                                "number": phoneNumber,
+                            },
+                            "role": "member",
+                        },
+                        "password": password,
+                    })
+                })
+
+                if (!response.ok) {
+                    const errorData = await response.json()
+                    setErrors({ username: errorData.message || 'Sign up failed' })
+                    return
+                }
+
+                const data = await response.json()
+                // Store token if provided
+                if (data.token) {
+                    localStorage.setItem('token', data.token)
+                }
+                // Redirect to home page or sign in page
+                window.location.href = '/'
             }
+        } catch (error) {
+            setErrors({ username: 'An error occurred. Please try again.' })
+            console.error('Auth error:', error)
         } finally {
             setIsLoading(false)
         }
@@ -332,7 +384,7 @@ const AuthForm = ({ type }: { type: "SIGN_IN" | "SIGN_UP" }) => {
                                 href='/sign-in'
                                 className={linkClassName}
                             >
-                                Sign in here
+                                Sign in
                             </Link>
                         </>
                     ) : (
@@ -342,7 +394,7 @@ const AuthForm = ({ type }: { type: "SIGN_IN" | "SIGN_UP" }) => {
                                 href='/sign-up'
                                 className={linkClassName}
                             >
-                                Sign up here
+                                Sign up
                             </Link>
                         </>
                     )}
