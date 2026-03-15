@@ -4,6 +4,8 @@ import React, { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { cn } from '@/lib/utils'
+import { API_BASE_URL } from '@/lib/api'
+import { setAccessToken } from '@/lib/auth/token'
 
 type ErrorsType = {
     username?: string
@@ -118,15 +120,16 @@ const AuthForm = ({ type }: { type: "SIGN_IN" | "SIGN_UP" }) => {
         setIsLoading(true)
         try {
             if (type === 'SIGN_IN') {
-                const response = await fetch('http://localhost:8080/api/v1/auth/signin', {
+                const response = await fetch(`${API_BASE_URL}/auth/signin`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
+                    credentials: 'include',
                     body: JSON.stringify({
-                        "username": username,
-                        "password": password,
-                        "isRememberMe": isRememberMe,
+                        username,
+                        password,
+                        isRememberMe,
                     })
                 })
 
@@ -136,31 +139,32 @@ const AuthForm = ({ type }: { type: "SIGN_IN" | "SIGN_UP" }) => {
                     return
                 }
 
-                const data = await response.json()
-                // Store token if provided
-                if (data.token) {
-                    localStorage.setItem('token', data.token)
+                const data: AuthResponse = await response.json()
+                // Persist access token + exp and schedule silent refresh
+                if (data.accessToken?.token && data.accessToken?.exp) {
+                    setAccessToken(data.accessToken.token, data.accessToken.exp)
                 }
                 // Redirect to home page
                 window.location.href = '/'
             } else {
-                const response = await fetch('http://localhost:8080/api/v1/auth/signup', {
+                const response = await fetch(`${API_BASE_URL}/auth/signup`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
+                    credentials: 'include',
                     body: JSON.stringify({
-                        "account": {
-                            "username": username,
-                            "fullname": fullname,
-                            "email": email,
-                            "phoneNumber": {
-                                "countryCode": countryCode,
-                                "number": phoneNumber,
+                        account: {
+                            username,
+                            fullname,
+                            email,
+                            phoneNumber: {
+                                countryCode,
+                                number: phoneNumber,
                             },
-                            "role": "member",
+                            role: 'member',
                         },
-                        "password": password,
+                        password,
                     })
                 })
 
@@ -170,12 +174,12 @@ const AuthForm = ({ type }: { type: "SIGN_IN" | "SIGN_UP" }) => {
                     return
                 }
 
-                const data = await response.json()
-                // Store token if provided
-                if (data.token) {
-                    localStorage.setItem('token', data.token)
+                const data: AuthResponse = await response.json()
+                // Persist access token + exp and schedule silent refresh
+                if (data.accessToken?.token && data.accessToken?.exp) {
+                    setAccessToken(data.accessToken.token, data.accessToken.exp)
                 }
-                // Redirect to home page or sign in page
+                // Redirect to home page
                 window.location.href = '/'
             }
         } catch (error) {

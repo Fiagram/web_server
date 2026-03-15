@@ -11,15 +11,26 @@ declare interface Account {
   role: "admin" | "member";
 };
 
-declare interface SignUpRequest extends Account {
+declare interface AccessTokenResponse {
+  token: string;
+  /** Unix timestamp (seconds) when the access token expires. */
+  exp: number;
+}
+
+declare interface SignUpRequest {
+  account: Account;
   password: string;
-};
+}
 
 declare interface SignInRequest {
   username: string;
   password: string;
-  isRememberMe: bool;
-};
+  isRememberMe: boolean;
+}
+
+declare interface AuthResponse {
+  accessToken: AccessTokenResponse;
+}
 
 declare interface Asset {
   name: string;
