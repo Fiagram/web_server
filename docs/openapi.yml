@@ -344,8 +344,10 @@ components:
     SignupResponse:
       type: object
       additionalProperties: false
-      required: [accessToken]
+      required: [account, accessToken]
       properties:
+        account:
+          $ref: "#/components/schemas/Account"
         accessToken:
           $ref: "#/components/schemas/AccessTokenResponse"
 
@@ -366,8 +368,10 @@ components:
     SigninResponse:
       type: object
       additionalProperties: false
-      required: [accessToken]
+      required: [account, accessToken]
       properties:
+        account:
+          $ref: "#/components/schemas/Account"
         accessToken:
           $ref: "#/components/schemas/AccessTokenResponse"
 
