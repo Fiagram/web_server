@@ -1,13 +1,12 @@
 version: "3.8"
 
 services:
-  web:
+  fiagram_web_server:
     build: .
     ports:
       - "3000:3000"
+    env_file:
+      - .env
     environment:
       - NODE_ENV=production
-    restart: unless-stopped
-    # Uncomment and add your environment variables
-    # env_file:
-    #   - .env.production
+    restart: always

@@ -37,7 +37,10 @@ export function getAccessToken(): string | null {
 export function getTokenExp(): number | null {
     if (typeof window === "undefined") return null;
     const raw = localStorage.getItem(TOKEN_EXP_KEY);
-    return raw ? parseInt(raw, 10) : null;
+    if (!raw) return null;
+
+    const exp = parseInt(raw, 10);
+    return Number.isNaN(exp) ? null : exp;
 }
 
 /**
@@ -60,14 +63,20 @@ export function clearAccessToken(): void {
 }
 
 /**
- * Bootstrap: call once on app mount to re-schedule refresh if a token already
- * exists in localStorage (e.g. after a page reload).
+ * Bootstrap: call once on app mount to validate and re-schedule refresh.
+ * Returns `false` when the stored access token is missing/invalid.
  */
-export function initTokenRefresh(): void {
+export function initTokenRefresh(): boolean {
+    const token = getAccessToken();
     const exp = getTokenExp();
-    if (exp) {
-        scheduleTokenRefresh(exp);
+
+    if (!token || !exp) {
+        clearAccessToken();
+        return false;
     }
+
+    scheduleTokenRefresh(exp);
+    return true;
 }
 
 // ---------------------------------------------------------------------------
