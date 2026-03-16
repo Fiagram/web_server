@@ -1,6 +1,7 @@
 import { parseStringify } from "../utils";
 import { API_BASE_URL } from "@/lib/api";
 import { clearAccessToken } from "@/lib/auth/token";
+import { getAccountFromStorage } from "@/lib/auth/account";
 
 /**
  * Sign out the current session completely:
@@ -40,21 +41,6 @@ export const signOutAccount = async (): Promise<boolean> => {
     }
 };
 
-export const getLoggedInAccount = async () => {
-    try {
-        const account: Account = {
-            username: "tamnnm",
-            fullname: "Nguyễn Ngọc Minh Tâm",
-            email: "adsfadf@gmail.com",
-            phoneNumber: {
-                countryCode: "+84",
-                number: "123456789",
-            },
-            role: "member",
-        };
-        return parseStringify(account);
-    } catch (error) {
-        console.log(error);
-        return null;
-    }
-}
+export const getSignedInAccount = (): Account | null => {
+    return getAccountFromStorage();
+};

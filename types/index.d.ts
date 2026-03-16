@@ -28,7 +28,12 @@ declare interface SignInRequest {
   isRememberMe: boolean;
 }
 
-declare interface AuthResponse {
+declare interface SigninResponse {
+  account: Account;
+  accessToken: AccessTokenResponse;
+}
+
+declare interface SignupResponse {
   accessToken: AccessTokenResponse;
 }
 

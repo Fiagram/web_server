@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { cn } from '@/lib/utils'
 import { API_BASE_URL } from '@/lib/api'
 import { setAccessToken } from '@/lib/auth/token'
+import { saveAccount } from '@/lib/auth/account'
 
 type ErrorsType = {
     username?: string
@@ -139,10 +140,14 @@ const AuthForm = ({ type }: { type: "SIGN_IN" | "SIGN_UP" }) => {
                     return
                 }
 
-                const data: AuthResponse = await response.json()
+                const data: SigninResponse = await response.json()
                 // Persist access token + exp and schedule silent refresh
                 if (data.accessToken?.token && data.accessToken?.exp) {
                     setAccessToken(data.accessToken.token, data.accessToken.exp)
+                }
+                // Persist account info for server + client reads
+                if (data.account) {
+                    saveAccount(data.account)
                 }
                 // Redirect to home page
                 window.location.href = '/'
@@ -174,11 +179,19 @@ const AuthForm = ({ type }: { type: "SIGN_IN" | "SIGN_UP" }) => {
                     return
                 }
 
-                const data: AuthResponse = await response.json()
+                const data: SignupResponse = await response.json()
                 // Persist access token + exp and schedule silent refresh
                 if (data.accessToken?.token && data.accessToken?.exp) {
                     setAccessToken(data.accessToken.token, data.accessToken.exp)
                 }
+                // SignupResponse has no account field — construct from form data
+                saveAccount({
+                    username,
+                    fullname,
+                    email,
+                    phoneNumber: { countryCode, number: phoneNumber },
+                    role: 'member',
+                })
                 // Redirect to home page
                 window.location.href = '/'
             }

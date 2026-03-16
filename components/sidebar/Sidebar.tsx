@@ -7,7 +7,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import Footer from './Footer'
 
-const Sidebar = ({ account }: { account: Account }) => {
+const Sidebar = () => {
   const pathname = usePathname();
 
   return (
@@ -53,7 +53,7 @@ const Sidebar = ({ account }: { account: Account }) => {
         })}
       </nav>
 
-      <Footer account={account} />
+      <Footer />
     </section>
   )
 }
