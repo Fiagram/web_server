@@ -2,13 +2,21 @@
 
 import { sidebarLinks } from '@/constants'
 import { cn } from '@/lib/utils'
+import { Home, PieChart, TrendingUp, User } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import Footer from './Footer'
 
+const iconMap = {
+  Home,
+  PieChart,
+  TrendingUp,
+  User,
+} as const
+
 const Sidebar = () => {
-  const pathname = usePathname();
+  const pathname = usePathname()
 
   return (
     <section className="sticky left-0 top-0 flex h-screen w-fit flex-col justify-between border-r border-sb-border 
@@ -27,25 +35,32 @@ const Sidebar = () => {
         </Link>
 
         {sidebarLinks.map((item) => {
-          const isActive = (pathname === (item.route || pathname.startsWith(`${item.route}/`)))
+          const isActive =
+            item.route === '/'
+              ? pathname === '/'
+              : pathname === item.route || pathname.startsWith(`${item.route}/`)
+
+          const Icon = iconMap[item.icon]
 
           return (
-            <Link href={item.route} key={item.label}
-              className={
-                cn('flex flex-row items-center justify-start max-xl:justify-center gap-3 py-2 md:p-3 2xl:p-4 rounded-lg',
-                  { 'bg-sb-item-bg-active': isActive })}>
-              <div className="relative size-6">
-                <Image
-                  src={item.imgURL}
-                  alt={item.label}
-                  fill
-                  className={cn({
-                    'brightness-[3] invert-0': isActive
-                  })}
-                />
-              </div>
-              <p className={cn("text-16 font-semibold text-sb-fg max-xl:hidden",
-                { "text-sb-item-fg-active!": isActive })}>
+            <Link
+              href={item.route}
+              key={item.label}
+              className={cn(
+                'flex flex-row items-center justify-start max-xl:justify-center gap-3 py-2 md:p-3 2xl:p-4 rounded-lg transition-colors',
+                { 'bg-sb-item-bg-active': isActive }
+              )}
+            >
+              <Icon
+                className={cn('size-6 text-sb-fg', {
+                  'text-sb-item-fg-active': isActive,
+                })}
+              />
+              <p
+                className={cn('text-16 font-semibold text-sb-fg max-xl:hidden', {
+                  'text-sb-item-fg-active!': isActive,
+                })}
+              >
                 {item.label}
               </p>
             </Link>

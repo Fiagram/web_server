@@ -1,143 +1,68 @@
 export const sidebarLinks = [
   {
-    imgURL: "/icons/home.svg",
+    icon: "Home",
     route: "/",
     label: "Home",
   },
   {
-    imgURL: "/icons/dollar-circle.svg",
-    route: "/my-banks",
-    label: "My Banks",
+    icon: "PieChart",
+    route: "/portfolio",
+    label: "Portfolio",
   },
   {
-    imgURL: "/icons/transaction.svg",
-    route: "/transaction-history",
-    label: "Transaction History",
+    icon: "TrendingUp",
+    route: "/strategy",
+    label: "Strategy",
   },
   {
-    imgURL: "/icons/money-send.svg",
-    route: "/payment-transfer",
-    label: "Transfer Funds",
+    icon: "User",
+    route: "/profile",
+    label: "Profile",
+  },
+] as const;
+
+/** Default asset groups for the financial indicators panel */
+export const defaultIndicatorGroups: IndicatorGroup[] = [
+  {
+    id: 'crypto',
+    name: 'Crypto Market',
+    assets: [
+      { symbol: 'BTC', name: 'Bitcoin', currentValue: 67542.30, changeWeek: 2.45, changeMonth: 8.12, changeYear: 142.56 },
+      { symbol: 'ETH', name: 'Ethereum', currentValue: 3521.80, changeWeek: -1.23, changeMonth: 5.67, changeYear: 89.34 },
+    ],
+  },
+  {
+    id: 'vn-stock',
+    name: 'Vietnamese Stock Market',
+    assets: [
+      { symbol: 'VNINDEX', name: 'VN-Index', currentValue: 1245.67, changeWeek: 0.89, changeMonth: -2.34, changeYear: 12.45 },
+      { symbol: 'HNX', name: 'HNX Index', currentValue: 234.12, changeWeek: -0.45, changeMonth: -1.78, changeYear: 8.92 },
+      { symbol: 'VN30', name: 'VN30 Index', currentValue: 1312.45, changeWeek: 1.12, changeMonth: -1.56, changeYear: 15.67 },
+    ],
+  },
+  {
+    id: 'us-stock',
+    name: 'US Stock Market',
+    assets: [
+      { symbol: 'SPX', name: 'S&P 500', currentValue: 5234.18, changeWeek: 0.67, changeMonth: 3.45, changeYear: 24.56 },
+      { symbol: 'DJI', name: 'Dow Jones', currentValue: 39512.84, changeWeek: 0.34, changeMonth: 2.89, changeYear: 18.23 },
+      { symbol: 'IXIC', name: 'NASDAQ', currentValue: 16742.39, changeWeek: 1.23, changeMonth: 4.56, changeYear: 35.67 },
+    ],
+  },
+  {
+    id: 'asia-stock',
+    name: 'Asian Stock Market',
+    assets: [
+      { symbol: 'N225', name: 'Nikkei 225', currentValue: 38456.78, changeWeek: -0.78, changeMonth: 1.23, changeYear: 28.45 },
+      { symbol: 'HSI', name: 'Hang Seng', currentValue: 16723.45, changeWeek: -2.34, changeMonth: -5.67, changeYear: -12.34 },
+    ],
+  },
+  {
+    id: 'precious-metals',
+    name: 'Precious Metals',
+    assets: [
+      { symbol: 'XAU', name: 'Gold', currentValue: 2345.60, changeWeek: 0.56, changeMonth: 2.34, changeYear: 15.78 },
+      { symbol: 'XAG', name: 'Silver', currentValue: 28.45, changeWeek: -0.89, changeMonth: 1.23, changeYear: 22.34 },
+    ],
   },
 ];
-
-// good_user / good_password - Bank of America
-export const TEST_USER_ID = "6627ed3d00267aa6fa3e";
-
-// custom_user -> Chase Bank
-// export const TEST_ACCESS_TOKEN =
-//   "access-sandbox-da44dac8-7d31-4f66-ab36-2238d63a3017";
-
-// custom_user -> Chase Bank
-export const TEST_ACCESS_TOKEN =
-  "access-sandbox-229476cf-25bc-46d2-9ed5-fba9df7a5d63";
-
-export const ITEMS = [
-  {
-    id: "6624c02e00367128945e", // appwrite item Id
-    accessToken: "access-sandbox-83fd9200-0165-4ef8-afde-65744b9d1548",
-    itemId: "VPMQJKG5vASvpX8B6JK3HmXkZlAyplhW3r9xm",
-    userId: "6627ed3d00267aa6fa3e",
-    accountId: "X7LMJkE5vnskJBxwPeXaUWDBxAyZXwi9DNEWJ",
-  },
-  {
-    id: "6627f07b00348f242ea9", // appwrite item Id
-    accessToken: "access-sandbox-74d49e15-fc3b-4d10-a5e7-be4ddae05b30",
-    itemId: "Wv7P6vNXRXiMkoKWPzeZS9Zm5JGWdXulLRNBq",
-    userId: "6627ed3d00267aa6fa3e",
-    accountId: "x1GQb1lDrDHWX4BwkqQbI4qpQP1lL6tJ3VVo9",
-  },
-];
-
-export const topCategoryStyles = {
-  "Food and Drink": {
-    bg: "bg-blue-25",
-    circleBg: "bg-blue-100",
-    text: {
-      main: "text-blue-900",
-      count: "text-blue-700",
-    },
-    progress: {
-      bg: "bg-blue-100",
-      indicator: "bg-blue-700",
-    },
-    icon: "/icons/monitor.svg",
-  },
-  Travel: {
-    bg: "bg-success-25",
-    circleBg: "bg-success-100",
-    text: {
-      main: "text-success-900",
-      count: "text-success-700",
-    },
-    progress: {
-      bg: "bg-success-100",
-      indicator: "bg-success-700",
-    },
-    icon: "/icons/coins.svg",
-  },
-  default: {
-    bg: "bg-pink-25",
-    circleBg: "bg-pink-100",
-    text: {
-      main: "text-pink-900",
-      count: "text-pink-700",
-    },
-    progress: {
-      bg: "bg-pink-100",
-      indicator: "bg-pink-700",
-    },
-    icon: "/icons/shopping-bag.svg",
-  },
-};
-
-export const transactionCategoryStyles = {
-  "Food and Drink": {
-    borderColor: "border-pink-600",
-    backgroundColor: "bg-pink-500",
-    textColor: "text-pink-700",
-    chipBackgroundColor: "bg-inherit",
-  },
-  Payment: {
-    borderColor: "border-success-600",
-    backgroundColor: "bg-green-600",
-    textColor: "text-success-700",
-    chipBackgroundColor: "bg-inherit",
-  },
-  "Bank Fees": {
-    borderColor: "border-success-600",
-    backgroundColor: "bg-green-600",
-    textColor: "text-success-700",
-    chipBackgroundColor: "bg-inherit",
-  },
-  Transfer: {
-    borderColor: "border-red-700",
-    backgroundColor: "bg-red-700",
-    textColor: "text-red-700",
-    chipBackgroundColor: "bg-inherit",
-  },
-  Processing: {
-    borderColor: "border-[#F2F4F7]",
-    backgroundColor: "bg-gray-500",
-    textColor: "text-[#344054]",
-    chipBackgroundColor: "bg-[#F2F4F7]",
-  },
-  Success: {
-    borderColor: "border-[#12B76A]",
-    backgroundColor: "bg-[#12B76A]",
-    textColor: "text-[#027A48]",
-    chipBackgroundColor: "bg-[#ECFDF3]",
-  },
-  Travel: {
-    borderColor: "border-[#0047AB]",
-    backgroundColor: "bg-blue-500",
-    textColor: "text-blue-700",
-    chipBackgroundColor: "bg-[#ECFDF3]",
-  },
-  default: {
-    borderColor: "",
-    backgroundColor: "bg-blue-500",
-    textColor: "text-blue-700",
-    chipBackgroundColor: "bg-inherit",
-  },
-};
