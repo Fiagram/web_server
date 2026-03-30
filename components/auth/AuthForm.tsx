@@ -13,7 +13,6 @@ type ErrorsType = {
     password?: string
     fullname?: string
     email?: string
-    countryCode?: string
     phoneNumber?: string
     isRememberMe?: string
 }
@@ -24,7 +23,6 @@ const AuthForm = ({ type }: { type: "SIGN_IN" | "SIGN_UP" }) => {
     const [isRememberMe, setIsRememberMe] = useState(false)
     const [fullname, setFullname] = useState('')
     const [email, setEmail] = useState('')
-    const [countryCode, setCountryCode] = useState('+84')
     const [phoneNumber, setPhoneNumber] = useState('')
     const [errors, setErrors] = useState<ErrorsType>({})
     const [isLoading, setIsLoading] = useState(false)
@@ -99,9 +97,6 @@ const AuthForm = ({ type }: { type: "SIGN_IN" | "SIGN_UP" }) => {
             if (emailError) newErrors.email = emailError
 
             if (phoneNumber) {
-                const countryCodeError = validateCountryCode(countryCode)
-                if (countryCodeError) newErrors.countryCode = countryCodeError
-
                 const phoneError = validatePhoneNumber(phoneNumber)
                 if (phoneError) newErrors.phoneNumber = phoneError
             }
@@ -163,10 +158,7 @@ const AuthForm = ({ type }: { type: "SIGN_IN" | "SIGN_UP" }) => {
                             username,
                             fullname,
                             email,
-                            phoneNumber: {
-                                countryCode,
-                                number: phoneNumber,
-                            },
+                            phoneNumber: phoneNumber,
                             role: 'member',
                         },
                         password,
@@ -189,7 +181,7 @@ const AuthForm = ({ type }: { type: "SIGN_IN" | "SIGN_UP" }) => {
                     username,
                     fullname,
                     email,
-                    phoneNumber: { countryCode, number: phoneNumber },
+                    phoneNumber: phoneNumber,
                     role: 'member',
                 })
                 // Redirect to home page
@@ -328,37 +320,19 @@ const AuthForm = ({ type }: { type: "SIGN_IN" | "SIGN_UP" }) => {
                             <label className={labelClassName}>
                                 Phone Number <span className='text-muted-foreground text-xs'>(optional)</span>
                             </label>
-                            <div className='flex flex-row gap-2'>
-                                <input
-                                    id='countryCode'
-                                    type='text'
-                                    placeholder='+84'
-                                    value={countryCode}
-                                    onChange={(e) => {
-                                        setCountryCode(e.target.value)
-                                        if (errors.countryCode) setErrors({ ...errors, countryCode: undefined })
-                                    }}
-                                    className={cn(inputClassName, "min-w-20 flex-0",
-                                        { "text-utils-error border-utils-error": errors.countryCode }
-                                    )}
-                                />
-                                <input
-                                    id='phoneNumber'
-                                    type='tel'
-                                    placeholder='909234567'
-                                    value={phoneNumber}
-                                    onChange={(e) => {
-                                        setPhoneNumber(e.target.value)
-                                        if (errors.phoneNumber) setErrors({ ...errors, phoneNumber: undefined })
-                                    }}
-                                    className={cn(inputClassName, "flex-1",
-                                        { "text-utils-error border-utils-error": errors.phoneNumber }
-                                    )}
-                                />
-                            </div>
-                            {errors.countryCode && (
-                                <p className={invalidClassName}>{errors.countryCode}</p>
-                            )}
+                            <input
+                                id='phoneNumber'
+                                type='tel'
+                                placeholder='909234567'
+                                value={phoneNumber}
+                                onChange={(e) => {
+                                    setPhoneNumber(e.target.value)
+                                    if (errors.phoneNumber) setErrors({ ...errors, phoneNumber: undefined })
+                                }}
+                                className={cn(inputClassName, "flex-1",
+                                    { "text-utils-error border-utils-error": errors.phoneNumber }
+                                )}
+                            />
                             {errors.phoneNumber && (
                                 <p className={invalidClassName}>{errors.phoneNumber}</p>
                             )}
