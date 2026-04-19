@@ -4,6 +4,43 @@ import { useState } from 'react'
 import { updatePassword } from '@/lib/actions/profile.actions'
 import { Eye, EyeOff, Loader2 } from 'lucide-react'
 
+const PasswordField = ({
+    label,
+    value,
+    onChange,
+    show,
+    onToggle,
+}: {
+    label: string
+    value: string
+    onChange: (v: string) => void
+    show: boolean
+    onToggle: () => void
+}) => (
+    <div className="flex flex-col gap-1.5">
+        <label className="text-12 font-medium text-gray-500 uppercase tracking-wide">
+            {label}
+        </label>
+        <div className="relative">
+            <input
+                type={show ? 'text' : 'password'}
+                value={value}
+                onChange={(e) => onChange(e.target.value)}
+                required
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 pr-10 text-14 text-gray-900 
+                     focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500"
+            />
+            <button
+                type="button"
+                onClick={onToggle}
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+            >
+                {show ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+            </button>
+        </div>
+    </div>
+)
+
 const PasswordUpdate = () => {
     const [oldPassword, setOldPassword] = useState('')
     const [newPassword, setNewPassword] = useState('')
@@ -46,43 +83,6 @@ const PasswordUpdate = () => {
             setIsLoading(false)
         }
     }
-
-    const PasswordField = ({
-        label,
-        value,
-        onChange,
-        show,
-        onToggle,
-    }: {
-        label: string
-        value: string
-        onChange: (v: string) => void
-        show: boolean
-        onToggle: () => void
-    }) => (
-        <div className="flex flex-col gap-1.5">
-            <label className="text-12 font-medium text-gray-500 uppercase tracking-wide">
-                {label}
-            </label>
-            <div className="relative">
-                <input
-                    type={show ? 'text' : 'password'}
-                    value={value}
-                    onChange={(e) => onChange(e.target.value)}
-                    required
-                    className="w-full rounded-lg border border-gray-300 px-3 py-2 pr-10 text-14 text-gray-900 
-                     focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500"
-                />
-                <button
-                    type="button"
-                    onClick={onToggle}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                >
-                    {show ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
-                </button>
-            </div>
-        </div>
-    )
 
     return (
         <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
